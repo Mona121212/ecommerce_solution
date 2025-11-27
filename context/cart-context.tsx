@@ -80,4 +80,62 @@ export const CartProvider = ({ children }: CartProviderProps) => {
       prevItems.filter((item) => item.product.id !== productId)
     );
   };
+
+  // function to update the quantity of a sepcific item in the cart
+  const updateQuantity = (productId: number, quantity: number) => {
+    if (quantity <= 0) {
+      removeItem(productId);
+      return;
+    }
+    setItems((prevItems) =>
+      prevItems.map((item) =>
+        item.product.id === productId ? { ...item, quantity } : item
+      )
+    );
+  };
+
+  //function to clear the cart
+  const clearCart = () => {
+    setItems([]);
+  };
+
+  // function to get the total number of items in the cart
+  const getItemCount = () => {
+    return items.reduce((total, item) => total + item.quantity, 0);
+  };
+
+  // function to get the total price of items in the cart
+
+  const getTotal = () => {
+    return items.reduce(
+      (total, item) => total + item.product.price * item.quantity,
+      0
+    );
+  };
+
+  return (
+    <CartContext.Provider
+      value={{
+        items,
+        addItem,
+        removeItem,
+        updateQuantity,
+        clearCart,
+        getItemCount,
+        getTotal,
+      }}
+    >
+      {children}
+    </CartContext.Provider>
+  );
 };
+
+// customer hook to use the cart context
+
+export const useCart = () => {
+  const context = useContext(CartContext);
+  if (context === undefined) {
+    throw new Error("userCart must be used within a CartProvider");
+  }
+  return context;
+}
