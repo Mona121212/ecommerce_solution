@@ -37,7 +37,7 @@ export const fetchFeaturedProductsByCategory = async (
 };
 
 // fetch all available categories
-export const fetchAllCategory = async (): Promise<string[]> => {
+export const fetchAllCategories = async (): Promise<string[]> => {
   try {
     // fakestore 的所有分类是 /products/categories
     const response = await fetch(`${BASE_URL}/products/categories`);
